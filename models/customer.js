@@ -13,7 +13,23 @@ class Customer {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
-    this.notes = notes;
+    this._notes = notes;
+  }
+
+  get fullName() {
+    return this.firstName + " " + this.lastName;
+  }
+
+  get notes() {
+    return this._notes;
+  }
+
+  set notes(val) {
+    if (!val) {
+      this._notes = "";
+    } else {
+      this._notes = val;
+    }
   }
 
   /** find all customers. */
@@ -70,7 +86,7 @@ class Customer {
             `INSERT INTO customers (first_name, last_name, phone, notes)
              VALUES ($1, $2, $3, $4)
              RETURNING id`,
-          [this.firstName, this.lastName, this.phone, this.notes],
+          [this.firstName, this.lastName, this.phone, this._notes],
       );
       this.id = result.rows[0].id;
     } else {
@@ -91,10 +107,6 @@ class Customer {
     }
   }
 
-  fullName() {
-    return this.firstName + " " + this.lastName;
-  }
-
   // Queries for customers that have names with term in them
   static async searchName(term) {
     const result = await db.query(
@@ -102,7 +114,7 @@ class Customer {
               first_name AS "firstName",
               last_name AS "lastName",
               phone,
-              notes
+              notes AS "_notes"
         FROM customers
         WHERE CONCAT(first_name, ' ', last_name) ILIKE $1
         ORDER BY last_name, first_name`,
@@ -118,7 +130,7 @@ class Customer {
             first_name AS "firstName",
             last_name AS "lastName",
             phone,
-            c.notes,
+            c.notes AS "_notes",
             COUNT(*) AS "resCount"
       FROM customers as c
       JOIN reservations
