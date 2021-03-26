@@ -90,6 +90,26 @@ class Customer {
       );
     }
   }
+
+  fullName() {
+    return this.firstName + " " + this.lastName;
+  }
+
+  // Queries for customers that have names with term in them
+  static async search(term) {
+    const result = await db.query(
+      `SELECT id,
+              first_name AS "firstName",
+              last_name AS "lastName",
+              phone,
+              notes
+        FROM customers
+        WHERE CONCAT(first_name, ' ', last_name) LIKE $1
+        ORDER BY last_name, first_name`,
+        [`%${term}%`]
+      );
+    return result.rows.map(c => new Customer(c));
+  }
 }
 
 module.exports = Customer;
