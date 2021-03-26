@@ -96,7 +96,7 @@ class Customer {
   }
 
   // Queries for customers that have names with term in them
-  static async search(term) {
+  static async searchName(term) {
     const result = await db.query(
       `SELECT id,
               first_name AS "firstName",
@@ -104,11 +104,36 @@ class Customer {
               phone,
               notes
         FROM customers
-        WHERE CONCAT(first_name, ' ', last_name) LIKE $1
+        WHERE CONCAT(first_name, ' ', last_name) ILIKE $1
         ORDER BY last_name, first_name`,
         [`%${term}%`]
       );
     return result.rows.map(c => new Customer(c));
+  }
+
+  static async getBest() {
+    const results = await db.query(
+      `
+      SELECT c.id,
+            first_name AS "firstName",
+            last_name AS "lastName",
+            phone,
+            c.notes,
+            COUNT(*) AS "resCount"
+      FROM customers as c
+      JOIN reservations
+      ON reservations.customer_id = c.id
+      GROUP BY c.id, first_name, last_name, phone, c.notes
+      ORDER BY COUNT(*) DESC
+      LIMIT 10
+      `
+    )
+
+    return results.rows.map(c => {
+      let customer = new Customer(c);
+      customer.resCount = c.resCount;
+      return customer;
+    });
   }
 }
 

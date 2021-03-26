@@ -14,13 +14,19 @@ const router = new express.Router();
 
 router.get("/", async function (req, res, next) {
   let customers;
-  if (req.query.search) {
-    customers = await Customer.search(req.query.search);
-    console.log(customers);
+  let searchTerm = req.query.search;
+  if (searchTerm) {
+    customers = await Customer.searchName(searchTerm);
   } else {
     customers = await Customer.all();
   }
   return res.render("customer_list.html", { customers });
+});
+
+
+router.get('/best', async function (req, res) {
+  let bestCustomers = await Customer.getBest();
+  return res.render("customer_best.html", { bestCustomers })
 });
 
 /** Form to add a new customer. */
@@ -88,5 +94,6 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
 
   return res.redirect(`/${customerId}/`);
 });
+
 
 module.exports = router;
