@@ -20,19 +20,31 @@ class Reservation {
     this.notes = notes;
   }
 
+  get numGuests() {
+    return this._numGuests
+  }
+
   set numGuests(val) {
     if (val >= 1) {
-      this.numGuests = val;
+      this._numGuests = val;
     }
     throw new BadRequestError();
   }
 
+  get startAt() {
+    return this._startAt;
+  }
+
   set startAt(val) {
     if (val instanceof Date) {
-      this.startAt = val;
+      this._startAt = val;
     } else {
       throw new BadRequestError();
     }
+  }
+
+  get customerId() {
+    return this._customerId;
   }
 
   set customerId(val) {

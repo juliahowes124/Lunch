@@ -24,6 +24,9 @@
             <li>
               <b>{{ reservation.getFormattedStartAt() }}</b>
               for {{ reservation.numGuests }}
+              {% if reservation.notes %}
+              Notes: {{ reservation.notes }}
+              {%endif%}
             </li>
           {% endfor %}
         </ul>

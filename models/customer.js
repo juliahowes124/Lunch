@@ -13,7 +13,7 @@ class Customer {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
-    this._notes = notes;
+    this.notes = notes;
   }
 
   get fullName() {

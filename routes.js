@@ -39,7 +39,7 @@ router.get("/add/", async function (req, res, next) {
 
 router.post("/add/", async function (req, res, next) {
   const { firstName, lastName, phone, notes } = req.body;
-  const customer = new Customer({ firstName, lastName, phone, notes });
+  const customer = new Customer({ firstName, lastName, phone, notes:0 });
   await customer.save();
 
   return res.redirect(`/${customer.id}/`);
@@ -94,6 +94,13 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
 
   return res.redirect(`/${customerId}/`);
 });
+
+router.get("/:id/edit-reservation/", async function (req,res) {
+  const customer = await Customer.get(req.params.id);
+  return res.render("reservation_edit_form.html", customer)
+})
+
+// router.post("/:id/edit-reservation/")
 
 
 module.exports = router;
