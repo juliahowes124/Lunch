@@ -27,8 +27,9 @@ class Reservation {
   set numGuests(val) {
     if (val >= 1) {
       this._numGuests = val;
+    } else {
+      throw new BadRequestError();
     }
-    throw new BadRequestError();
   }
 
   get startAt() {
@@ -48,7 +49,8 @@ class Reservation {
   }
 
   set customerId(val) {
-    throw new BadRequestError();
+    this._customerId = val;
+    // throw new BadRequestError();
   }
 
   /** formatter for startAt */
@@ -68,9 +70,10 @@ class Reservation {
                   notes AS "notes"
            FROM reservations
            WHERE customer_id = $1`,
-        [customerId],
+        [customerId]
     );
 
+    console.log('in Reservaton getReservationsForCustomer!!!', results)
     return results.rows.map(row => new Reservation(row));
   }
 
