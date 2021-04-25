@@ -116,10 +116,11 @@ class Customer {
               phone,
               notes AS "_notes"
         FROM customers
-        WHERE CONCAT(first_name, ' ', last_name) ILIKE $1
+        WHERE to_tsvector(first_name || ' ' || last_name) @@ to_tsquery($1)
         ORDER BY last_name, first_name`,
-        [`%${term}%`]
+        [`${term}:*`]
       );
+
     return result.rows.map(c => new Customer(c));
   }
 
