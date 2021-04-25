@@ -12,6 +12,9 @@
         <a href="/{{ customer.id }}/">
           {{ customer.fullName }}
         </a>
+        {% if mostRecentReservations[loop.index] %}
+        <p><strong>{{ mostRecentReservations[loop.index].startAt }}</strong></p>
+        {% endif %}
       </li>
     {% endfor %}
   </ul>

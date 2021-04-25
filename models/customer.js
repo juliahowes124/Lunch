@@ -42,9 +42,13 @@ class Customer {
                   phone,
                   notes
            FROM customers
-           ORDER BY last_name, first_name`,
+           ORDER BY last_name, first_name`
     );
-    return results.rows.map(c => new Customer(c));
+    let customers = await Promise.all(results.rows.map(async c => {
+      let newCustomer = new Customer(c);
+      return newCustomer;
+    }));
+    return customers;
   }
 
   /** get a customer by ID. */
@@ -75,7 +79,13 @@ class Customer {
   /** get all reservations for this customer. */
 
   async getReservations() {
-    return await Reservation.getReservationsForCustomer(this.id);
+    await Reservation.getReservationsForCustomer(this.id);
+  }
+
+  /** get most recent reservation for this customer */
+  async getMostRecent() {
+    const reservation = await Reservation.getRecentReservation(this.id);
+    return reservation;
   }
 
   /** save this customer. */

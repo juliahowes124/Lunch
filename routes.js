@@ -4,6 +4,7 @@ const { SearchSource } = require("@jest/core");
 /** Routes for Lunchly */
 
 const express = require("express");
+const moment = require('moment');
 
 const Customer = require("./models/customer");
 const Reservation = require("./models/reservation");
@@ -20,7 +21,15 @@ router.get("/", async function (req, res, next) {
   } else {
     customers = await Customer.all();
   }
-  return res.render("customer_list.html", { customers });
+  let mostRecentReservations = [];
+  for(let customer of customers) {
+    let recent = await customer.getMostRecent();
+    mostRecentReservations.push(recent);
+  }
+  mostRecentReservations = mostRecentReservations.map(r => {
+    return r ? {startAt: moment(r.startAt).format("MM/DD/YYYY @ h:mm a")} : null;
+  })
+  return res.render("customer_list.html", { customers, mostRecentReservations });
 });
 
 

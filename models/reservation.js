@@ -73,8 +73,21 @@ class Reservation {
         [customerId]
     );
 
-    console.log('in Reservaton getReservationsForCustomer!!!', results)
     return results.rows.map(row => new Reservation(row));
+  }
+
+  /** given a customer id, find their most recent reservation. */
+  static async getRecentReservation(customerId) {
+    const results = await db.query(
+      `SELECT num_guests AS "numGuests",
+              start_at AS "startAt"
+       FROM reservations
+       WHERE customer_id = $1
+       ORDER BY start_at DESC
+       LIMIT 1`,
+    [customerId]
+    );
+    return results.rows.length ? new Reservation(results.rows[0]) : null;
   }
 
   async save() {
