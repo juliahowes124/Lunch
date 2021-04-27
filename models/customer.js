@@ -79,7 +79,7 @@ class Customer {
   /** get all reservations for this customer. */
 
   async getReservations() {
-    await Reservation.getReservationsForCustomer(this.id);
+    return await Reservation.getReservationsForCustomer(this.id);
   }
 
   /** get most recent reservation for this customer */

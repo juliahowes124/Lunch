@@ -5,18 +5,17 @@
   <a class="btn btn-primary" style="float: right" href="/add/">Add a Customer</a>
 
   <h1>Customers</h1>
-
-  <div style="column-count: 4">
+  <div class="row">
     {% for customer in customers %}
-      <div class="list-item">
+      <div class="col-3">
         <a href="/{{ customer.id }}/">
           {{ customer.fullName }}
         </a>
-        {% if mostRecentReservations[loop.index] %}
-        <p><strong>{{ mostRecentReservations[loop.index].startAt }}</strong></p>
+        {% if mostRecentReservations[loop.index0] %}
+        <p><strong>{{ mostRecentReservations[loop.index0].startAt }}</strong></p>
         {% endif %}
+        <hr>
       </div>
-      <hr>
     {% endfor %}
   </div>
 

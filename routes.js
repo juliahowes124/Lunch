@@ -60,7 +60,6 @@ router.get("/:id/", async function (req, res, next) {
   const customer = await Customer.get(req.params.id);
 
   const reservations = await customer.getReservations();
-
   return res.render("customer_detail.html", { customer, reservations });
 });
 
@@ -76,8 +75,8 @@ router.get("/:id/edit/", async function (req, res, next) {
 
 router.post("/:id/edit/", async function (req, res, next) {
   const customer = await Customer.get(req.params.id);
-  customer.firstName = req.body.firstName;
-  customer.lastName = req.body.lastName;
+  customer.firstName = req.body.firstName || null;
+  customer.lastName = req.body.lastName || null;
   customer.phone = req.body.phone;
   customer.notes = req.body.notes;
   await customer.save();
@@ -99,6 +98,9 @@ router.post("/:id/add-reservation/", async function (req, res, next) {
     numGuests,
     notes,
   });
+
+  console.log(reservation);
+
   await reservation.save();
 
   return res.redirect(`/${customerId}/`);

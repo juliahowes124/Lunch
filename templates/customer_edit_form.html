@@ -10,6 +10,7 @@
     <div class="form-group">
       <label for="first-name">First Name: </label>
       <input id="first-name"
+             required="true"
              class="form-control"
              name="firstName"
              value="{{ customer.firstName }}">
@@ -17,6 +18,7 @@
     <div class="form-group">
       <label for="last-name">Last Name:</label>
       <input id="last-name"
+             required="true"
              class="form-control"
              name="lastName"
              value="{{ customer.lastName }}">
@@ -34,7 +36,7 @@
                 class="form-control"
                 name="notes">{{ customer.notes }}</textarea>
     </div>
-    <button class="btn btn-primary">Add</button>
+    <button class="btn btn-primary">Edit</button>
     <a href="/{{ customer.id }}/" class="btn btn-danger">Cancel</a>
   </form>
 

@@ -72,7 +72,6 @@ class Reservation {
            WHERE customer_id = $1`,
         [customerId]
     );
-
     return results.rows.map(row => new Reservation(row));
   }
 

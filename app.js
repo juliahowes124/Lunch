@@ -7,11 +7,17 @@ const nunjucks = require("nunjucks");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
 const { NotFoundError } = require("./expressError");
+const ignoreFavicon = require('./ignoreFaviocon');
 
 const app = new Express();
 
+
+
+
 // Parse body for urlencoded (non-JSON) data
 app.use(bodyParser.urlencoded({ extended: false }));
+//Prevent request to get favicon.ico
+app.use(ignoreFavicon);
 
 nunjucks.configure("templates", {
   autoescape: true,
