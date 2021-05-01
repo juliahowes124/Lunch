@@ -127,6 +127,7 @@ class Customer {
               notes AS "_notes"
         FROM customers
         WHERE to_tsvector(first_name || ' ' || last_name) @@ to_tsquery($1)
+        OR to_tsvector(CAST(id as varchar(10))) @@ to_tsquery($1)
         ORDER BY last_name, first_name`,
         [`${term}:*`]
       );
